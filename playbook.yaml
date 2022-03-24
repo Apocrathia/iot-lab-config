@@ -1,0 +1,33 @@
+---
+- hosts: all
+
+  vars:
+    ansible_become_password: "{{ password }}"
+
+  remote_user: "{{ username }}"
+
+  become: true
+
+  gather_facts: true
+
+  serial: 1
+
+  tasks:
+    - import_tasks: tasks/packages.yaml
+      tags:
+        - packages
+    - import_tasks: tasks/tweaks.yaml
+      tags:
+        - tweaks
+    - import_tasks: tasks/networking.yaml
+      tags:
+        - networking
+    # Disabled for now
+    # - import_tasks: tasks/interception.yaml
+    #   tags:
+    #     - interception
+    # - name: Reboot host
+    #   ansible.builtin.command:
+    #     name: reboot
+    #     warn: true
+    #     check_mode: true

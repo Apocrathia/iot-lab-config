@@ -1,0 +1,6 @@
+### Interception Setup ###
+---
+- name: test
+  ansible.builtin.command:
+    name: echo "test"
+# mitmproxy --mode transparent --showhost –spoof-source-address

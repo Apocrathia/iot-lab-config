@@ -1,0 +1,29 @@
+### Prepare User ###
+---
+- name: Set ZSH as default shell
+  shell: |
+    chsh -s /bin/zsh {{ username }}
+  when:
+    - "'zsh' in ansible_facts.packages"
+
+- name: Clone/update oh-my-zsh
+  git:
+    repo: https://github.com/robbyrussell/oh-my-zsh
+    dest: /home/{{ username }}/.oh-my-zsh
+    # clone: yes
+    update: yes
+
+- name: Copy zshrc
+  copy:
+    src: files/zshrc
+    dest: /home/{{ username }}/.zshrc
+  when:
+    - "'zsh' in ansible_facts.packages"
+
+- name: Set oh-my-zsh path
+  lineinfile:
+    path: /home/{{ username }}/.zshrc
+    regexp: "^export ZSH=.*"
+    line: export ZSH="/home/{{ username }}/.oh-my-zsh"
+  when:
+    - "'zsh' in ansible_facts.packages"

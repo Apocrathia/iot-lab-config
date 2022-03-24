@@ -1,0 +1,52 @@
+### Network Tasks ###
+---
+- name: Set hostname to inventory hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+  when:
+    - ansible_hostname != inventory_hostname
+
+- name: Install needed NetworkManager libraries
+  ansible.builtin.package:
+    name:
+      - NetworkManager-libnm
+      - nm-connection-editor
+      - libsemanage-python
+      - policycoreutils-python
+    state: present
+
+- name: Ensure NetworkManager is running
+  service:
+    name: NetworkManager
+    state: started
+    enabled: true
+
+- name: Rename network interface
+  ansible.builtin.command:
+    name: ip link set {{ ansible_eth0 }} down
+    warn: true
+    check_mode: true
+
+- name: Set IP for internal interface
+  community.general.nmcli:
+    conn_name: internal
+    ifname: eth1
+    type: ethernet
+    ip4: 10.0.1.1
+    state: present
+
+- name: Copy iptables script
+  ansible.builtin.copy:
+    src: files/iptables.sh
+    dest: /etc/init.d/iptables.sh
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Copy dnsmasq config
+  ansible.builtin.copy:
+    src: files/dnsmasq.conf
+    dest: /etc/dnsmasq.conf
+    mode: 0644
+    owner: root
+    group: root
