@@ -21,15 +21,31 @@
     state: started
     enabled: true
 
-# - name: Rename network interface
+# - name: Rename network interfaces
 
-- name: Set IP for internal interface
-  community.general.nmcli:
-    conn_name: internal
-    ifname: eth1
-    type: ethernet
-    ip4: 10.0.1.1
-    state: present
+- name: Set IP for internal interfaces
+  block:
+    - name: Internal
+      community.general.nmcli:
+        conn_name: internal
+        ifname: eth1
+        type: ethernet
+        ip4: 10.0.1.1
+        state: present
+    - name: External
+      community.general.nmcli:
+        conn_name: external
+        ifname: eth0
+        type: ethernet
+        ip4: 10.0.1.1
+        state: present
+    - name: wireless
+      community.general.nmcli:
+        conn_name: internal
+        ifname: wlan0
+        type: ethernet
+        ip4: 10.0.1.2
+        state: present
 
 - name: Copy iptables script
   ansible.builtin.copy:
@@ -46,3 +62,4 @@
     mode: 0644
     owner: root
     group: root
+# - name: Start wireless access point
