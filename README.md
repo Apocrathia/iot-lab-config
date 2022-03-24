@@ -14,6 +14,8 @@ This repository contains a set of configurations for the IoT Lab to setup the fo
 ## Additional Tweaks
 
 - Configure `unattended-upgrades` to automatically upgrade packages
+- Remove snapd and other unnecessary packages.
+- Set zsh as default shell with oh-my-zsh
 
 # System Configuration
 
