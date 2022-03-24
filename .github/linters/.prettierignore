@@ -1,0 +1,7 @@
+# Editors
+.vscode/
+# Trash
+.DS_Store
+Thumbs.db
+# Ansible
+ansible.cfg
