@@ -1,0 +1,4 @@
+all:
+  hosts:
+    ubuntu-test:
+      ansible_host: 10.100.1.94
