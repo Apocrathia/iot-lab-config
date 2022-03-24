@@ -21,11 +21,7 @@
     state: started
     enabled: true
 
-- name: Rename network interface
-  ansible.builtin.command:
-    name: ip link set {{ ansible_eth0 }} down
-    warn: true
-    check_mode: true
+# - name: Rename network interface
 
 - name: Set IP for internal interface
   community.general.nmcli:
