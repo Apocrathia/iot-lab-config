@@ -27,7 +27,7 @@ We're going to work with Ubuntu 22.04. At the time of writing, the LTS version h
 
 ## Installation
 
-Start off by grabbing the [current build of Ubuntu 22.04](https://cdimage.ubuntu.com/ubuntu-server/daily-live/current/jammy-live-server-amd64.iso) and copying it to a USB drive. If you need a tool, [balenaEtcher](https://balena.io/etcher/) will hold your hand.
+Start off by grabbing the [current build of Ubuntu 22.04](https://cdimage.ubuntu.com/ubuntu-server/daily-preinstalled/current/jammy-preinstalled-server-arm64+raspi.img.xz) and copying it to a USB drive. If you need a tool, [balenaEtcher](https://balena.io/etcher/) will hold your hand.
 
 Once the installer is running, here's how to configure the system:
 
