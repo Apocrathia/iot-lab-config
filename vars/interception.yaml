@@ -1,0 +1,5 @@
+---
+# mitmproxy
+# renovate datasource=github-releases depName=mitmproxy/mitmproxy
+mitmproxy_version: "8.0.0"
+mitmproxy_binary_url: "https://snapshots.mitmproxy.org/{{ mitmproxy_version }}/mitmproxy-{{ mitmproxy_version }}-linux.tar.gz"

@@ -1,6 +1,24 @@
 ### Interception Setup ###
 ---
+- name: Include variables
+  include_vars:
+    file: vars/interception.yaml
+    name: interception
+
 - name: test
   ansible.builtin.command:
     name: echo "test"
+
+- name: Pull latest mitmproxy binary
+  ansible.builtin.fetch:
+    src: "{{ mitmproxy_binary_url }}"
+    dest: /tmp/mitmproxy.tar.gz
+    flat: yes
+    validate_certs: no
+
+- name: Extract mitmproxy binary
+  ansible.builtin.unarchive:
+    src: /tmp/mitmproxy.tar.gz
+    dest: /tmp/mitmproxy
+    flat: yes
 # mitmproxy --mode transparent --showhost –spoof-source-address
