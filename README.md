@@ -37,12 +37,11 @@ Once the installer is running, here's how to configure the system:
 - Password - Whatever you want
 - SSH: Install the OpenSSH server and import keys from GitHub. If you don't have keys in GitHub, you can generate them with `ssh-keygen` later. This will be needed to perform the rest of the configuration.
 
-````
 # Vault
 
 ```bash
 ansible-vault create secrets
-````
+```
 
 This will prompt you for a password open an editor to create a new vault. This password will be used to decrypt the vault later. Provide the following information in the editor:
 
@@ -55,8 +54,9 @@ password: (your password selected at installation)
 
 To run the playbook, use the following command:
 
-````bash
+```bash
 ansible-playbook -e=@secrets playbook.yaml
+```
 
 # Ad Hoc Tasks
 
@@ -64,7 +64,7 @@ Reboot systems
 
 ```bash
 ansible -e=@secrets lab -a "/sbin/reboot" --become --ask-become-pass
-````
+```
 
 # Resources
 
