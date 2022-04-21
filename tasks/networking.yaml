@@ -83,8 +83,8 @@
 
 ### Start dnsmasq Configuration ###
 - name: Copy dnsmasq config
-  ansible.builtin.copy:
-    src: files/dnsmasq.conf
+  template:
+    src: files/dnsmasq.conf.j2
     dest: /etc/dnsmasq.conf
     mode: 0644
     owner: root

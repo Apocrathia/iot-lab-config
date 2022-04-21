@@ -4,5 +4,7 @@ eth0:
   ip4:
 # iptables
 # dnsmasq
+dhcp:
+  range: 10.0.1.100-10.0.1.200
 # hostapd
 ssid: ResearchLab
