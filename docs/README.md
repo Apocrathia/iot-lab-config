@@ -10,6 +10,7 @@ This repository contains a set of configurations for the IoT Lab to setup the fo
 - SSID Broadcast (hostapd)
 - Traffic interception (mitmproxy)
 - Traffic capture (tshark)
+- Traffic decryption (tshark)
 
 ## Additional Tweaks
 
