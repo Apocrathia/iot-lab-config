@@ -1,5 +1,6 @@
 ### Prepare Packages ###
 ---
+### Begin Package Management ###
 - name: Install packages
   ansible.builtin.apt:
     name: "{{ item }}"
@@ -75,7 +76,9 @@
         - "/var/lib/snapd"
         - "/var/cache/snapd"
         - "/usr/lib/snapd"
+### End Package Management ###
 
+### Begin Unattended Upgrades ###
 - name: Install unattended-upgrades
   ansible.builtin.apt:
     name: unattended-upgrades
@@ -113,3 +116,4 @@
     daemon_reload: true
     enabled: true
     state: restarted
+### End Unattended Upgrades ###
