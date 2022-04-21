@@ -1,10 +1,13 @@
 ---
 # general
 eth0:
-  ip4:
+  ip4: 10.0.1.1
 # iptables
 # dnsmasq
 dhcp:
+  start: 10.0.1.100
+  end: 10.0.1.200
   range: 10.0.1.100-10.0.1.200
+  time: 12h
 # hostapd
 ssid: ResearchLab

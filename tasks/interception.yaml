@@ -8,9 +8,9 @@
 ### Begin mitmproxy User Setup ###
 - name: Create mitmproxy user
   user:
-    name: "{{ mitmproxy_user }}"
+    name: "{{ mitmproxy.user }}"
     state: present
-    group: "{{ mitmproxy_user }}"
+    group: "{{ mitmproxy.user }}"
     groups:
       - sudo
 
@@ -18,7 +18,7 @@
   user:
     name: "{{ username }}"
     groups:
-      - "{{ mitmproxy_user }}"
+      - "{{ mitmproxy.user }}"
 ### End mitmproxy User Setup ###
 
 ### Begin mitmproxy Download ###
@@ -26,7 +26,7 @@
 # will run on an ARM architecture.
 - name: Pull latest mitmproxy binary
   ansible.builtin.fetch:
-    src: "{{ mitmproxy_binary_url }}"
+    src: "{{ mitmproxy.binary_url }}"
     dest: /tmp/mitmproxy.tar.gz
     flat: yes
     validate_certs: no
@@ -50,7 +50,7 @@
 - name: Enable SSL key logging
   ansible.builtin.lineinfile:
     path: /etc/profile.d/sslkeylogfile.sh
-    line: export SSLKEYLOGFILE=/home/{{ mitmproxy_user }}/keylog.log
+    line: export SSLKEYLOGFILE=/home/{{ mitmproxy.user }}/keylog.log
     state: present
     owner: root
     group: root
@@ -59,9 +59,9 @@
 - name: Create mitmproxy configuration
   ansible.builtin.template:
     src: files/mitmproxy.yaml.j2
-    dest: /home/{{ mitmproxy_user }}/.mitmproxy/config.yaml
-    group: "{{ mitmproxy_user }}"
-    setype: "{{ mitmproxy_user }}"
+    dest: /home/{{ mitmproxy.user }}/.mitmproxy/config.yaml
+    group: "{{ mitmproxy.user }}"
+    setype: "{{ mitmproxy.user }}"
     mode: 0640
 
 - name: Create mitmproxy systemd service

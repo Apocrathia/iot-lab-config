@@ -69,7 +69,7 @@ client_replay_concurrency: 1
 command_history: true
 
 # Location of the default mitmproxy configuration files. Type str.
-confdir: /home/{{ mitmproxy_user }}/.mitmproxy
+confdir: /home/{{ mitmproxy.user }}/.mitmproxy
 
 # Determine when server connections should be established. When set to
 # lazy, mitmproxy tries to defer establishing an upstream connection as
@@ -196,7 +196,7 @@ onboarding: true
 
 # Onboarding app domain. For transparent mode, use an IP when a DNS
 # entry for the app domain is not present. Type str.
-onboarding_host: mitm.it
+onboarding_host: {{ onboarding_host }}
 
 # Port to serve the onboarding app from. Type int.
 onboarding_port: 80
