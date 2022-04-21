@@ -5,10 +5,25 @@
     file: vars/interception.yaml
     name: interception
 
-- name: test
-  ansible.builtin.command:
-    name: echo "test"
+### Begin mitmproxy User Setup ###
+- name: Create mitmproxy user
+  user:
+    name: "{{ mitmproxy_user }}"
+    state: present
+    group: "{{ mitmproxy_user }}"
+    groups:
+      - sudo
 
+- name: Add local user to mitmproxy group
+  user:
+    name: "{{ username }}"
+    groups:
+      - "{{ mitmproxy_user }}"
+### End mitmproxy User Setup ###
+
+### Begin mitmproxy Download ###
+# This section I am unsure about and need to check if the provided binaries
+# will run on an ARM architecture.
 - name: Pull latest mitmproxy binary
   ansible.builtin.fetch:
     src: "{{ mitmproxy_binary_url }}"
@@ -19,6 +34,57 @@
 - name: Extract mitmproxy binary
   ansible.builtin.unarchive:
     src: /tmp/mitmproxy.tar.gz
-    dest: /tmp/mitmproxy
+    dest: /tmp/mitmproxy/
     flat: yes
-# mitmproxy --mode transparent --showhost –spoof-source-address
+
+- name: Move mitmproxy binary to /usr/local/bin
+  ansible.builtin.copy:
+    src: /tmp/mitmproxy/*
+    dest: /usr/local/bin/
+    mode: 0755
+    owner: root
+    group: root
+### End mitmproxy Download ###
+
+### Begin mitmproxy Setup ###
+- name: Enable SSL key logging
+  ansible.builtin.lineinfile:
+    path: /etc/profile.d/sslkeylogfile.sh
+    line: export SSLKEYLOGFILE=/home/{{ mitmproxy_user }}/keylog.log
+    state: present
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create mitmproxy configuration
+  ansible.builtin.template:
+    src: files/mitmproxy.yaml.j2
+    dest: /home/{{ mitmproxy_user }}/.mitmproxy/config.yaml
+    group: "{{ mitmproxy_user }}"
+    setype: "{{ mitmproxy_user }}"
+    mode: 0640
+
+- name: Create mitmproxy systemd service
+  ansible.builtin.template:
+    src: files/systemd/mitmproxy.service.j2
+    dest: /etc/systemd/system/mitmproxy.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable mitmproxy systemd service
+  ansible.builtin.systemd:
+    name: mitmproxy
+    enabled: yes
+    masked: no
+### End mitmproxy Setup ###
+
+### Start mitmproxy ###
+- name: Start mitmproxy systemd service
+  ansible.builtin.systemd:
+    state: started
+    name: mitmproxy

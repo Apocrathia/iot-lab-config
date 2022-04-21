@@ -1,0 +1,12 @@
+[Unit]
+Description=mitmproxy
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/mitmproxy
+Restart=always
+RestartSec=10
+User={{ mitmproxy_user }}
+
+[Install]
+WantedBy=multi-user.target
