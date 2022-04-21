@@ -15,10 +15,11 @@
     - nmcli
     - dnsmasq
     - iptables
-    - mitmproxy
+    # - mitmproxy # Pull directly from project. Repository is out of date.
     - nmap
     - tshark
     - tcpdump
+    - hostapd
 
 - name: Remove packages
   ansible.builtin.apt:
