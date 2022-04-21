@@ -16,9 +16,12 @@
     - import_tasks: tasks/packages.yaml
       tags:
         - packages
-    - import_tasks: tasks/tweaks.yaml
+    - import_tasks: tasks/system.yaml
       tags:
-        - tweaks
+        - system
+    - import_tasks: tasks/user.yaml
+      tags:
+        - user
     - import_tasks: tasks/networking.yaml
       tags:
         - networking
