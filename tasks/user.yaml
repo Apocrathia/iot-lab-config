@@ -1,5 +1,6 @@
 ### Prepare User ###
 ---
+### Begin User Shell Customization ###
 - name: Set ZSH as default shell
   shell: |
     chsh -s /bin/zsh {{ username }}
@@ -27,3 +28,4 @@
     line: export ZSH="/home/{{ username }}/.oh-my-zsh"
   when:
     - "'zsh' in ansible_facts.packages"
+### End User Shell Customization ###
