@@ -1,0 +1,8 @@
+---
+# general
+eth0:
+  ip4:
+# iptables
+# dnsmasq
+# hostapd
+ssid: ResearchLab

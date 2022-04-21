@@ -1,11 +1,11 @@
 ### Network Tasks ###
 ---
-- name: Set hostname to inventory hostname
-  ansible.builtin.hostname:
-    name: "{{ inventory_hostname }}"
-  when:
-    - ansible_hostname != inventory_hostname
+- name: Include variables
+  include_vars:
+    file: vars/networking.yaml
+    name: networking
 
+### Begin mitmproxy Configuration ###
 # https://docs.mitmproxy.org/stable/howto-transparent/#linux
 - name: Enable IPv4 Forwarding
   ansible.posix.sysctl:
@@ -21,7 +21,9 @@
   ansible.posix.sysctl:
     name: net.ipv4.conf.all.send_redirects
     value: 0
+### End mitmproxy Configuration ###
 
+### Begin NetworkManager Configuration ###
 - name: Install needed NetworkManager libraries
   ansible.builtin.package:
     name:
@@ -41,17 +43,17 @@
 
 - name: Set IP for internal interfaces
   block:
-    - name: Internal
-      community.general.nmcli:
-        conn_name: internal
-        ifname: eth1
-        type: ethernet
-        ip4: 10.0.1.1
-        state: present
     - name: External
       community.general.nmcli:
         conn_name: external
         ifname: eth0
+        type: ethernet
+        ip4: 10.0.1.1
+        state: present
+    - name: Internal
+      community.general.nmcli:
+        conn_name: internal
+        ifname: eth1
         type: ethernet
         ip4: 10.0.1.1
         state: present
@@ -62,7 +64,9 @@
         type: ethernet
         ip4: 10.0.1.2
         state: present
+### End NetworkManager Configuration ###
 
+### Start iptables Configuration ###
 - name: Copy iptables script
   ansible.builtin.copy:
     src: files/iptables.sh
@@ -71,6 +75,13 @@
     owner: root
     group: root
 
+- name: Reload iptables
+  ansible.builtin.service:
+    name: iptables
+    state: reloaded
+### End iptables Configuration ###
+
+### Start dnsmasq Configuration ###
 - name: Copy dnsmasq config
   ansible.builtin.copy:
     src: files/dnsmasq.conf
@@ -78,4 +89,36 @@
     mode: 0644
     owner: root
     group: root
-# - name: Start wireless access point
+
+- name: Enable dnsmasq systemd service
+  ansible.builtin.systemd:
+    name: dnsmasq
+    enabled: yes
+    masked: no
+
+- name: Start dnsmasq systemd service
+  ansible.builtin.systemd:
+    state: started
+    name: dnsmasq
+### End dnsmasq Configuration ###
+
+### Start hostapd Configuration ###
+- name: Create hostapd configuration
+  ansible.builtin.template:
+    src: files/hostapd.conf.j2
+    dest: /etc/hostapd/hostapd.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable hostapd systemd service
+  ansible.builtin.systemd:
+    name: hostapd
+    enabled: yes
+    masked: no
+
+- name: Start hostapd systemd service
+  ansible.builtin.systemd:
+    state: started
+    name: hostapd
+### End hostapd Configuration ###
